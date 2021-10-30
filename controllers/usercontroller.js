@@ -9,14 +9,14 @@ router.post("/create", async (req, res) => {
     try {
         const { username, password } = req.body.user;
         //encrypt user password here
-        console.log(username, password);//test
-        const salt = bcrypt.genSaltSync(12);//generating the salt
-        console.log(salt);//test
-        const pwHashed = bcrypt.hashSync(password, salt);// hashing the password
+        console.log(username, password); //test
+        const salt = bcrypt.genSaltSync(12); //generating the salt
+        console.log(salt); //test
+        const pwHashed = bcrypt.hashSync(password, salt); // hashing the password
         console.log(pwHashed)//test
-        const newUser = await User.create({//await user creation
-            username: username,//define username clearly
-            password: pwHashed//define password as pwHashed 
+        const newUser = await User.create({ //await user creation
+            username: username, //define username clearly
+            password: pwHashed //define password as pwHashed 
         });
         console.log(newUser, User);
         res.status(200).json({
