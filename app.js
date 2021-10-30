@@ -14,8 +14,8 @@ app.use("/user", controllers.usercontroller);
 db.authenticate()
   .then(() => db.sync()) // => {force: true}
   .then(() => {
-    app.listen(3000, () =>
-      console.log(`[Server: ] App is listening on Port ${3000}`)
+    app.listen(3001, () =>
+      console.log(`[Server: ] App is listening on Port ${3001}`)
     );
   })
   .catch((err) => {
