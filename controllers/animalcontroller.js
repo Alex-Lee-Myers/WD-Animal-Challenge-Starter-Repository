@@ -1,27 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const { Animal } = require("../models");
-// const validateJWT = require("../middleware/validate-jwt");
+let validateJWT = require("../middleware/validateSession");
 
 //! Find/get all animals
-router.get("/", async (req, res) => {
+router.get("/", validateJWT, async (req, res) => {
+    const { id } = req.user
     try {
+        const query = {
+            where: {
+                userID: id
+            }
+        };
         const animalEntries = await Animal.findAll();
         res.status(200).json(animalEntries);
     } catch (err) {
         res.status(500).json({ error: err });
     }
 });
-
+// validateJWT
 //! Create Animal
-router.post("/create", async (req, res) => {
+router.post("/create", validateJWT, async (req, res) => {
     const { name, legNumber, predator } = req.body.animal;
-    // const { id } = req.user
+    const { id } = req.user
+    console.log(id)
     const animalEntry = {
         name,
         legNumber,
-        predator
-        // owner: id
+        predator,
+        userID: id
     }
     try {
         const newAnimal = await Animal.create(animalEntry);
@@ -29,17 +36,20 @@ router.post("/create", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err });
     }
-    Animal.create(animalEntry)
+    // Animal.create(animalEntry)
 });
 
 //! Delete an entry
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", validateJWT, async (req, res) => {
     const animalId = req.params.id;
+    const { id } = req.user
+    console.log(id)
     console.log(animalId)
     try {
         const query = {
             where: {
-                id: animalId
+                id: animalId,
+                userID: id
             }
         };
 
@@ -51,13 +61,15 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 //! Update an animal
-router.put("/update/:id",  async (req, res) => {
+router.put("/update/:id", validateJWT, async (req, res) => {
     const { name, legNumber, predator } = req.body.animal;
     const animalId = req.params.id;
-
+    const { id } = req.user
+    
     const query = {
         where: {
             id: animalId,
+            userID: id
         }
     };
 

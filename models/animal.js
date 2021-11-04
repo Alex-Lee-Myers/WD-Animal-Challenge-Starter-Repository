@@ -13,6 +13,10 @@ const Animal = db.define('animal', {
   predator: {
     type: DataTypes.BOOLEAN,
     allowNull: false
+  },
+  userID: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 });
 
